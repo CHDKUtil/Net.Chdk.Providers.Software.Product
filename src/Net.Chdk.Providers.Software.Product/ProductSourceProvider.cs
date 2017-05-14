@@ -54,7 +54,7 @@ namespace Net.Chdk.Providers.Software.Product
 
         private bool IsMatch(SoftwareProductInfo product)
         {
-            if (product.Name == null)
+            if (product?.Name == null)
                 return true;
 
             return ProductName.Equals(product.Name, StringComparison.InvariantCulture);
