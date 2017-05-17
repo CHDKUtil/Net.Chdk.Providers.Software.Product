@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 
@@ -52,6 +53,8 @@ namespace Net.Chdk.Providers.Software.Product
 
         protected abstract string GetChannelName(SoftwareProductInfo product);
 
+        protected abstract CultureInfo GetLanguage(SoftwareSourceInfo source);
+
         private bool IsMatch(SoftwareProductInfo product)
         {
             if (product?.Name == null)
@@ -69,7 +72,17 @@ namespace Net.Chdk.Providers.Software.Product
             if (channelName == null)
                 return true;
 
-            return channelName.Equals(source.Channel, StringComparison.InvariantCulture);
+            if (!channelName.Equals(source.Channel, StringComparison.InvariantCulture))
+                return false;
+
+            if (product.Language == null)
+                return true;
+
+            var language = GetLanguage(source);
+            if (language == null)
+                return true;
+
+            return language.Equals(product.Language);
         }
 
         private bool IsMatch(SoftwareSourceInfo source, SoftwareProductInfo product, string sourceName)
