@@ -51,9 +51,9 @@ namespace Net.Chdk.Providers.Software.Product
 
         protected abstract string ProductName { get; }
 
-        protected abstract string GetChannelName(SoftwareProductInfo product);
+        protected virtual string GetChannelName(SoftwareProductInfo product) => null;
 
-        protected abstract CultureInfo GetLanguage(SoftwareSourceInfo source);
+        protected virtual CultureInfo GetLanguage(SoftwareSourceInfo source) => null;
 
         private bool IsMatch(SoftwareProductInfo product)
         {
