@@ -49,14 +49,27 @@ namespace Net.Chdk.Providers.Software.Product
                 .Where(s => IsMatch(s, product, sourceName));
         }
 
+        protected abstract string CategoryName { get; }
+
         protected abstract string ProductName { get; }
 
         protected virtual string GetChannelName(SoftwareProductInfo product) => null;
 
         protected virtual CultureInfo GetLanguage(SoftwareSourceInfo source) => null;
 
+        private bool IsMatch(string categoryName)
+        {
+            if (categoryName == null)
+                return true;
+
+            return CategoryName.Equals(categoryName, StringComparison.InvariantCulture);
+        }
+
         private bool IsMatch(SoftwareProductInfo product)
         {
+            if (!IsMatch(product?.Category))
+                return false;
+
             if (product?.Name == null)
                 return true;
 
