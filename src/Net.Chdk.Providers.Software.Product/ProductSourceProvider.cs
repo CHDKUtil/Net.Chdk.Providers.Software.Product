@@ -1,5 +1,5 @@
-﻿using Net.Chdk.Model.Software;
-using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Logging;
+using Net.Chdk.Model.Software;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -8,43 +8,41 @@ using System.Linq;
 
 namespace Net.Chdk.Providers.Software.Product
 {
-    public abstract class ProductSourceProvider : IProductSourceProvider
+    public abstract class ProductSourceProvider : DataProvider<Dictionary<string, SoftwareSourceInfo>>, IProductSourceProvider
     {
-        public ProductSourceProvider()
+        #region Constants
+
+        private const string DataFileName = "sources.json";
+
+        #endregion
+
+        #region Constructor
+
+        protected ProductSourceProvider(ILogger logger)
+            : base(logger)
         {
-            sources = new Lazy<IDictionary<string, SoftwareSourceInfo>>(GetSources);
         }
 
-        #region Sources
+        #endregion
 
-        private const string DataPath = "Data";
-        private const string SourcesFileName = "sources.json";
+        #region Data
 
-        private readonly Lazy<IDictionary<string, SoftwareSourceInfo>> sources;
-
-        private IDictionary<string, SoftwareSourceInfo> Sources => sources.Value;
-
-        private IDictionary<string, SoftwareSourceInfo> GetSources()
+        protected override string GetFilePath()
         {
-            var filePath = Path.Combine(DataPath, ProductName, SourcesFileName);
-            using (var reader = File.OpenText(filePath))
-            using (var jsonReader = new JsonTextReader(reader))
-            {
-                return JsonSerializer.CreateDefault().Deserialize<IDictionary<string, SoftwareSourceInfo>>(jsonReader);
-            }
+            return Path.Combine(Directories.Data, Directories.Product, ProductName, DataFileName);
         }
 
         #endregion
 
         public IEnumerable<KeyValuePair<string, SoftwareSourceInfo>> GetSources(SoftwareProductInfo product)
         {
-            return Sources
+            return Data
                 .Where(kvp => IsMatch(kvp.Value, product));
         }
 
         public IEnumerable<SoftwareSourceInfo> GetSources(SoftwareProductInfo product, string sourceName)
         {
-            return Sources
+            return Data
                 .Select(kvp => kvp.Value)
                 .Where(s => IsMatch(s, product, sourceName));
         }
