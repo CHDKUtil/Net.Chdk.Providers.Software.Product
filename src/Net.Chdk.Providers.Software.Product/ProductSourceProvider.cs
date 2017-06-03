@@ -34,6 +34,12 @@ namespace Net.Chdk.Providers.Software.Product
 
         #endregion
 
+        public IEnumerable<KeyValuePair<string, SoftwareSourceInfo>> GetSources(SoftwareCategoryInfo category)
+        {
+            return Data
+                .Where(kvp => IsMatch(kvp.Value, category));
+        }
+
         public IEnumerable<KeyValuePair<string, SoftwareSourceInfo>> GetSources(SoftwareProductInfo product)
         {
             return Data
@@ -55,19 +61,16 @@ namespace Net.Chdk.Providers.Software.Product
 
         protected virtual CultureInfo GetLanguage(SoftwareSourceInfo source) => null;
 
-        private bool IsMatch(string categoryName)
+        private bool IsMatch(SoftwareSourceInfo source, SoftwareCategoryInfo category)
         {
-            if (categoryName == null)
+            if (category?.Name == null)
                 return true;
 
-            return CategoryName.Equals(categoryName, StringComparison.InvariantCulture);
+            return CategoryName.Equals(category.Name, StringComparison.InvariantCulture);
         }
 
         private bool IsMatch(SoftwareProductInfo product)
         {
-            if (!IsMatch(product?.Category))
-                return false;
-
             if (product?.Name == null)
                 return true;
 
