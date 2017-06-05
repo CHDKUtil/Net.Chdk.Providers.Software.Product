@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Net.Chdk.Model.Category;
 using Net.Chdk.Model.Software;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace Net.Chdk.Providers.Software.Product
 
         #endregion
 
-        public IEnumerable<KeyValuePair<string, SoftwareSourceInfo>> GetSources(SoftwareCategoryInfo category)
+        public IEnumerable<KeyValuePair<string, SoftwareSourceInfo>> GetSources(CategoryInfo category)
         {
             return Data
                 .Where(kvp => IsMatch(kvp.Value, category));
@@ -61,7 +62,7 @@ namespace Net.Chdk.Providers.Software.Product
 
         protected virtual CultureInfo GetLanguage(SoftwareSourceInfo source) => null;
 
-        private bool IsMatch(SoftwareSourceInfo source, SoftwareCategoryInfo category)
+        private bool IsMatch(SoftwareSourceInfo source, CategoryInfo category)
         {
             if (category?.Name == null)
                 return true;
