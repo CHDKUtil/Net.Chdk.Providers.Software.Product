@@ -54,9 +54,9 @@ namespace Net.Chdk.Providers.Software.Product
                 .Where(s => IsMatch(s, product, sourceName));
         }
 
-        protected abstract string CategoryName { get; }
+        public abstract string ProductName { get; }
 
-        protected abstract string ProductName { get; }
+        protected abstract string CategoryName { get; }
 
         protected virtual string GetChannelName(SoftwareProductInfo product) => null;
 
