@@ -35,16 +35,18 @@ namespace Net.Chdk.Providers.Software.Product
 
         #endregion
 
-        public IEnumerable<KeyValuePair<string, SoftwareSourceInfo>> GetSources(CategoryInfo category)
+        public IEnumerable<ProductSource> GetSources(CategoryInfo category)
         {
             return Data
-                .Where(kvp => IsMatch(kvp.Value, category));
+                .Where(kvp => IsMatch(kvp.Value, category))
+                .Select(CreateProductSource);
         }
 
-        public IEnumerable<KeyValuePair<string, SoftwareSourceInfo>> GetSources(SoftwareProductInfo product)
+        public IEnumerable<ProductSource> GetSources(SoftwareProductInfo product)
         {
             return Data
-                .Where(kvp => IsMatch(kvp.Value, product));
+                .Where(kvp => IsMatch(kvp.Value, product))
+                .Select(CreateProductSource);
         }
 
         public IEnumerable<SoftwareSourceInfo> GetSources(SoftwareProductInfo product, string sourceName)
@@ -104,6 +106,11 @@ namespace Net.Chdk.Providers.Software.Product
         {
             return IsMatch(source, product)
                 && sourceName.Equals(source.Name, StringComparison.InvariantCulture);
+        }
+
+        private ProductSource CreateProductSource(KeyValuePair<string, SoftwareSourceInfo> kvp)
+        {
+            return new ProductSource(ProductName, kvp.Key, kvp.Value);
         }
     }
 }
