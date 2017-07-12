@@ -69,7 +69,7 @@ namespace Net.Chdk.Providers.Software.Product
             if (category?.Name == null)
                 return true;
 
-            return CategoryName.Equals(category.Name, StringComparison.InvariantCulture);
+            return CategoryName.Equals(category.Name, StringComparison.Ordinal);
         }
 
         private bool IsMatch(SoftwareProductInfo product)
@@ -77,7 +77,7 @@ namespace Net.Chdk.Providers.Software.Product
             if (product?.Name == null)
                 return true;
 
-            return ProductName.Equals(product.Name, StringComparison.InvariantCulture);
+            return ProductName.Equals(product.Name, StringComparison.Ordinal);
         }
 
         private bool IsMatch(SoftwareSourceInfo source, SoftwareProductInfo product)
@@ -89,7 +89,7 @@ namespace Net.Chdk.Providers.Software.Product
             if (channelName == null)
                 return true;
 
-            if (!channelName.Equals(source.Channel, StringComparison.InvariantCulture))
+            if (!channelName.Equals(source.Channel, StringComparison.Ordinal))
                 return false;
 
             if (product.Language == null)
@@ -105,7 +105,7 @@ namespace Net.Chdk.Providers.Software.Product
         private bool IsMatch(SoftwareSourceInfo source, SoftwareProductInfo product, string sourceName)
         {
             return IsMatch(source, product)
-                && sourceName.Equals(source.Name, StringComparison.InvariantCulture);
+                && sourceName.Equals(source.Name, StringComparison.Ordinal);
         }
 
         private ProductSource CreateProductSource(KeyValuePair<string, SoftwareSourceInfo> kvp)
