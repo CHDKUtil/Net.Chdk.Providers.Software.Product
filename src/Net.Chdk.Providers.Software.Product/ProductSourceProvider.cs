@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Net.Chdk.Model.Category;
 using Net.Chdk.Model.Software;
+using Net.Chdk.Providers.Product;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -17,11 +18,18 @@ namespace Net.Chdk.Providers.Software.Product
 
         #endregion
 
+        #region Fields
+
+        private IProductProvider ProductProvider { get; }
+
+        #endregion
+
         #region Constructor
 
-        protected ProductSourceProvider(ILogger logger)
+        protected ProductSourceProvider(IProductProvider productProvider, ILogger logger)
             : base(logger)
         {
+            ProductProvider = productProvider;
         }
 
         #endregion
@@ -34,6 +42,8 @@ namespace Net.Chdk.Providers.Software.Product
         }
 
         #endregion
+        
+        #region IProductSourceProvider Members
 
         public IEnumerable<ProductSource> GetSources(CategoryInfo category)
         {
@@ -56,13 +66,21 @@ namespace Net.Chdk.Providers.Software.Product
                 .Where(s => IsMatch(s, product, sourceName));
         }
 
-        public abstract string ProductName { get; }
+        #endregion
+        
+        #region Abstract/Virtual Members
 
-        protected abstract string CategoryName { get; }
+        protected abstract string ProductName { get; }
 
         protected virtual string GetChannelName(SoftwareProductInfo product) => null;
 
         protected virtual CultureInfo GetLanguage(SoftwareSourceInfo source) => null;
+
+        #endregion
+
+        #region Helper Members
+
+        private string CategoryName => ProductProvider.GetCategoryName(ProductName);
 
         private bool IsMatch(SoftwareSourceInfo source, CategoryInfo category)
         {
@@ -112,5 +130,7 @@ namespace Net.Chdk.Providers.Software.Product
         {
             return new ProductSource(ProductName, kvp.Key, kvp.Value);
         }
+
+        #endregion
     }
 }

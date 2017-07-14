@@ -47,6 +47,7 @@
     <PackageReference Include="Net.Chdk.Providers.Base" Version="0.1.0-alpha">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Net.Chdk.Providers.Product.Core" Version="0.1.0-alpha" />
     <PackageReference Include="Net.Chdk.Providers.Software.Core" Version="0.3.1-alpha" />
   </ItemGroup>
 
