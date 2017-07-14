@@ -49,25 +49,28 @@ namespace Net.Chdk.Providers.Software.Product
         {
             return Data
                 .Where(kvp => IsMatch(kvp.Value, category))
-                .Select(CreateProductSource);
+                .Select(CreateProductSource)
+                .OrderBy(GetProductSourceOrder);
         }
 
         public IEnumerable<ProductSource> GetSources(SoftwareProductInfo product)
         {
             return Data
                 .Where(kvp => IsMatch(kvp.Value, product))
-                .Select(CreateProductSource);
+                .Select(CreateProductSource)
+                .OrderBy(GetProductSourceOrder);
         }
 
         public IEnumerable<SoftwareSourceInfo> GetSources(SoftwareProductInfo product, string sourceName)
         {
             return Data
                 .Select(kvp => kvp.Value)
-                .Where(s => IsMatch(s, product, sourceName));
+                .Where(s => IsMatch(s, product, sourceName))
+                .OrderBy(GetSourceOrder);
         }
 
         #endregion
-        
+
         #region Abstract/Virtual Members
 
         protected abstract string ProductName { get; }
@@ -129,6 +132,19 @@ namespace Net.Chdk.Providers.Software.Product
         private ProductSource CreateProductSource(KeyValuePair<string, SoftwareSourceInfo> kvp)
         {
             return new ProductSource(ProductName, kvp.Key, kvp.Value);
+        }
+
+        private int GetProductSourceOrder(ProductSource productSource)
+        {
+            return GetSourceOrder(productSource.Source);
+        }
+
+        private int GetSourceOrder(SoftwareSourceInfo source)
+        {
+            var language = GetLanguage(source);
+            return language.IsCurrentUICulture()
+                ? -1
+                : 0;
         }
 
         #endregion
