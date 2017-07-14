@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>0.2.0</Version>
+    <Version>0.3.1</Version>
     <Product>CHIMP</Product>
     <Copyright>Copyright © 2017 Dmitry Shechtman</Copyright>
   </PropertyGroup>
@@ -36,12 +36,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Net.Chdk.Core" Version="0.2.0-alpha" />
-    <PackageReference Include="Net.Chdk.Json" Version="0.1.0-alpha" />
+    <PackageReference Include="Net.Chdk.Core" Version="0.2.0-alpha">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Net.Chdk.Json" Version="0.1.0-alpha">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Net.Chdk.Model.Category" Version="0.1.0-alpha" />
     <PackageReference Include="Net.Chdk.Model.Software" Version="0.1.0-alpha" />
-    <PackageReference Include="Net.Chdk.Providers.Base" Version="0.1.0-alpha" />
-    <PackageReference Include="Net.Chdk.Providers.Software.Core" Version="0.2.0-alpha" />
+    <PackageReference Include="Net.Chdk.Providers.Base" Version="0.1.0-alpha">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Net.Chdk.Providers.Software.Core" Version="0.3.1-alpha" />
   </ItemGroup>
 
 </Project>
